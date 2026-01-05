@@ -1,0 +1,21 @@
+{
+  "name": "franks-claude-marketplace",
+  "description": "Frank's personal Claude Code plugin marketplace featuring AI agent integrations and productivity tools",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "codex-exec",
+      "source": "./codex-exec-plugin",
+      "description": "Execute OpenAI Codex CLI for AI-powered code analysis, generation, refactoring, and reviews. Enables Claude Code to delegate specialized tasks to another AI agent.",
+      "version": "1.0.0",
+      "author": "frank",
+      "keywords": [
+        "codex",
+        "openai",
+        "code-review",
+        "ai-agent",
+        "code-generation"
+      ]
+    }
+  ]
+}

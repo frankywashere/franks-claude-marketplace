@@ -1,0 +1,16 @@
+{
+  "name": "codex-exec",
+  "version": "1.0.0",
+  "description": "Execute OpenAI Codex CLI for AI-powered code analysis, generation, refactoring, and reviews. Enables Claude Code to delegate specialized tasks to another AI agent.",
+  "author": "frank",
+  "homepage": "https://github.com/frank/franks-claude-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "openai",
+    "code-review",
+    "ai-agent",
+    "code-generation"
+  ],
+  "claude-code-version": ">=0.1.0"
+}
