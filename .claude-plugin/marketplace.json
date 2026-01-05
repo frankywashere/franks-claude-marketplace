@@ -2,7 +2,10 @@
   "name": "franks-claude-marketplace",
   "description": "Frank's personal Claude Code plugin marketplace featuring AI agent integrations and productivity tools",
   "version": "1.0.0",
-  "owner": "frankywashere",
+  "owner": {
+    "name": "frankywashere",
+    "url": "https://github.com/frankywashere"
+  },
   "plugins": [
     {
       "name": "codex-exec",
