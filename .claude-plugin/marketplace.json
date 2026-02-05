@@ -23,6 +23,26 @@
         "ai-agent",
         "code-generation"
       ]
+    },
+    {
+      "name": "FAFO",
+      "source": "./FAFO-plugin",
+      "description": "Direct macOS computer control - screenshots, mouse clicks, keyboard input, scrolling, dragging, and desktop automation via the aicontrol CLI",
+      "version": "1.0.0",
+      "author": {
+        "name": "frank",
+        "url": "https://github.com/frankywashere"
+      },
+      "keywords": [
+        "macos",
+        "automation",
+        "screen-capture",
+        "mouse-control",
+        "keyboard",
+        "desktop",
+        "aicontrol",
+        "computer-use"
+      ]
     }
   ]
 }
