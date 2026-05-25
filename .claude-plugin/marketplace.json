@@ -23,6 +23,24 @@
         "ai-agent",
         "code-generation"
       ]
+    },
+    {
+      "name": "grok-cli",
+      "source": "./grok-cli-plugin",
+      "description": "Drive the Grok CLI (xAI) as a headless agent from Claude Code. Delegate tasks, second opinions, diagnoses, and code changes to `grok -p`. Bundles a `grok` skill and a `grok-rescue` subagent.",
+      "version": "1.0.0",
+      "author": {
+        "name": "frank",
+        "url": "https://github.com/frankywashere"
+      },
+      "keywords": [
+        "grok",
+        "xai",
+        "ai-agent",
+        "second-opinion",
+        "code-review",
+        "cli"
+      ]
     }
   ]
 }
