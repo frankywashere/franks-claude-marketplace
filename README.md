@@ -26,10 +26,11 @@ Drive the **Grok CLI** (xAI) as a headless agent from Claude Code. Delegates tas
 - A `grok-rescue` subagent for autonomous multi-step hand-offs
 - Headless single-turn invocation with JSON output parsing
 - Read-only and write-capable (worktree-isolated) modes
+- **Image & video generation** via Grok Imagine (`/imagine`, `/imagine-video`) — works headlessly
 - Session continuity (`--continue` / `--resume`), `--best-of-n`, and self-verify (`--check`)
 - Robust failure detection (parses output, not exit code) and documented MCP/effort-flag gotchas
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 ## Installation
 

@@ -72,6 +72,44 @@ Use these when the user says "ask Grok to keep going / follow up / refine its la
 - **`--rules "<text>"`** / **`--system-prompt-override "<text>"`** — inject extra rules / replace
   the system prompt.
 
+## Media generation — Grok Imagine (image & video)
+
+Grok can generate **images** and **video** (xAI "Grok Imagine") via slash commands, and these
+**work in headless mode** — pass the slash command as the `-p` prompt:
+
+```bash
+# Image
+grok -p "/imagine <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+# Video
+grok -p "/imagine-video <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+```
+
+**Where the output lands (verified):** NOT in `--cwd`. Grok writes it under its sessions dir:
+
+```
+~/.grok/sessions/<URL-ENCODED-CWD>/<sessionId>/images/<N>.jpg
+```
+
+The cwd is URL-encoded into the path (`/` → `%2F`), images are numbered `1.jpg`, `2.jpg`, …
+(image verified as a 1024×1024 JPEG). Video saves analogously under the same session dir.
+
+**Retrieving the file.** The exact saved path is reported inside the result's `.text` (prose, not
+a dedicated field). Two robust ways to get it:
+
+```bash
+# (a) glob the session's media dir using the returned sessionId (most reliable)
+SID=$(jq -r '.sessionId' /tmp/grok.json)
+ls -t ~/.grok/sessions/*/"$SID"/images/* 2>/dev/null | head -1     # newest image
+ls -t ~/.grok/sessions/*/"$SID"/videos/* 2>/dev/null | head -1     # video (if applicable)
+
+# (b) or parse the path out of the .text prose with a regex
+jq -r '.text' /tmp/grok.json | grep -oE '/[^ `]*\.(jpg|jpeg|png|mp4|mov)'
+```
+
+After generating, **copy the file to where the user actually wants it** (their cwd or a given path)
+and surface it — don't leave it buried in the sessions dir. Media generation runs slow and consumes
+credits, so background it and only fire on a clear user request.
+
 ## How to run it (operationally)
 
 1. Compose a tight, self-contained prompt — Grok does **not** share Claude's conversation context,
