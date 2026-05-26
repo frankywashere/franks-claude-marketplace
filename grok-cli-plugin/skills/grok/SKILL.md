@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Delegate a task to the Grok CLI agent (xAI) running headlessly in the terminal. Use when the user says "ask Grok", "have Grok do X", "get Grok's take", wants a second opinion / alternate implementation from Grok, or wants a task run through Grok. Invokes `grok -p` non-interactively via Bash and relays the result. Do NOT use for other CLI agents (e.g. Codex) or for work the main Claude thread should just do itself.
+description: Use the locally installed Grok CLI (xAI) headlessly for two things. (1) GENERATE IMAGES OR VIDEO with Grok Imagine — trigger whenever the user wants to make/create/generate an image, picture, photo, or video "with Grok" / "using Grok" / via "/imagine" or "Grok Imagine" (e.g. "make a video of a mermaid using grok"). Grok CAN do this headlessly via `/imagine` and `/imagine-video`, even though `grok --help` looks like a coding CLI and `grok models` lists only a coding model — do not conclude otherwise. (2) Delegate coding/agent tasks to Grok — "ask Grok", "have Grok do X", "get Grok's take", a second opinion, alternate implementation, or diagnosis. Invokes `grok -p` via Bash and relays the result. Do NOT use for other CLI agents (e.g. Codex) or for work the main Claude thread should just do itself.
 allowed-tools:
   - Bash(grok *)
   - Bash(grok)
@@ -74,7 +74,14 @@ Use these when the user says "ask Grok to keep going / follow up / refine its la
 
 ## Media generation — Grok Imagine (image & video)
 
-Grok can generate **images** and **video** (xAI "Grok Imagine") via slash commands, and these
+> **Don't be fooled into thinking Grok can't do this.** `grok --help` looks like a coding CLI and
+> `grok models` may list only a coding model (e.g. `grok-build`) — that is NOT evidence that media
+> generation is unavailable. `/imagine` and `/imagine-video` route to xAI's image/video models
+> server-side and **work headlessly** (verified: produced a 1024×1024 JPEG). When the user asks to
+> "make a video/image with Grok," USE these commands — do not refuse, and do not silently fall back
+> to writing your own animation code unless the user explicitly asks for hand-rolled rendering.
+
+Grok generates **images** and **video** (xAI "Grok Imagine") via slash commands, and these
 **work in headless mode** — pass the slash command as the `-p` prompt:
 
 ```bash

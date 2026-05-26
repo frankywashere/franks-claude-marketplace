@@ -1,6 +1,6 @@
 ---
 name: grok-rescue
-description: Proactively use when the user wants GROK (xAI's CLI agent) specifically to handle something — a second opinion, an alternate implementation, a diagnosis/root-cause pass, or a substantial coding task — handed to the headless `grok -p` CLI. Use when the user says "ask Grok", "have Grok ...", "what does Grok think", "get Grok to ...". Do NOT use this for other CLI agents (e.g. Codex), or for work the main Claude thread should just do itself.
+description: Proactively use when the user wants GROK (xAI's CLI) specifically to do something via the headless `grok -p` CLI. Two main cases — (1) GENERATE AN IMAGE OR VIDEO with Grok Imagine ("make/create a video/image/picture with Grok", "/imagine", "Grok Imagine"); Grok does this headlessly via `/imagine` / `/imagine-video` even though it looks like a coding CLI. (2) A coding/agent task — second opinion, alternate implementation, diagnosis/root-cause pass. Use when the user says "ask Grok", "have Grok ...", "what does Grok think", "get Grok to ...". Do NOT use for other CLI agents (e.g. Codex), or for work the main Claude thread should just do itself.
 model: sonnet
 tools: Bash
 skills:

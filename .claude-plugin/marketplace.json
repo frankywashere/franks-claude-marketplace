@@ -28,7 +28,7 @@
       "name": "grok-cli",
       "source": "./grok-cli-plugin",
       "description": "Drive the Grok CLI (xAI) as a headless agent from Claude Code. Delegate tasks, second opinions, diagnoses, and code changes to `grok -p`, plus image/video generation via Grok Imagine (`/imagine`, `/imagine-video`). Bundles a `grok` skill and a `grok-rescue` subagent.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "frank",
         "url": "https://github.com/frankywashere"
