@@ -30,7 +30,7 @@ Drive the **Grok CLI** (xAI) as a headless agent from Claude Code. Delegates tas
 - Session continuity (`--continue` / `--resume`), `--best-of-n`, and self-verify (`--check`)
 - Robust failure detection (parses output, not exit code) and documented MCP/effort-flag gotchas
 
-**Version:** 1.2.0
+**Version:** 1.2.1
 
 ## Installation
 

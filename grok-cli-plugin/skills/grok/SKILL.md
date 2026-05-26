@@ -91,14 +91,15 @@ grok -p "/imagine <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.e
 grok -p "/imagine-video <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
 ```
 
-**Where the output lands (verified):** NOT in `--cwd`. Grok writes it under its sessions dir:
+**Where the output lands (verified):** NOT in `--cwd`. Grok writes media under its sessions dir:
 
 ```
-~/.grok/sessions/<URL-ENCODED-CWD>/<sessionId>/images/<N>.jpg
+~/.grok/sessions/<URL-ENCODED-CWD>/<sessionId>/images/<N>.jpg   # images
+~/.grok/sessions/<URL-ENCODED-CWD>/<sessionId>/videos/<N>.mp4   # video
 ```
 
-The cwd is URL-encoded into the path (`/` → `%2F`), images are numbered `1.jpg`, `2.jpg`, …
-(image verified as a 1024×1024 JPEG). Video saves analogously under the same session dir.
+The cwd is URL-encoded into the path (`/` → `%2F`); files are numbered `1`, `2`, … Verified:
+images are 1024×1024 JPEG; video is an **MP4** (H.264 + AAC audio, 1280×720, ~8 s clip, ~5 MB).
 
 **Retrieving the file.** The exact saved path is reported inside the result's `.text` (prose, not
 a dedicated field). Two robust ways to get it:
@@ -113,9 +114,10 @@ ls -t ~/.grok/sessions/*/"$SID"/videos/* 2>/dev/null | head -1     # video (if a
 jq -r '.text' /tmp/grok.json | grep -oE '/[^ `]*\.(jpg|jpeg|png|mp4|mov)'
 ```
 
-After generating, **copy the file to where the user actually wants it** (their cwd or a given path)
-and surface it — don't leave it buried in the sessions dir. Media generation runs slow and consumes
-credits, so background it and only fire on a clear user request.
+**Surface the file, and honor any destination.** Grok leaves the only copy buried in its sessions
+dir, so copy it somewhere useful and tell the user the path. If the user named a destination ("to my
+desktop", "to ~/clips"), copy it there; otherwise copying into the current working directory is fine.
+Media generation runs slow and consumes credits, so background it and only fire on a clear user request.
 
 ## How to run it (operationally)
 
