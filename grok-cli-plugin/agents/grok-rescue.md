@@ -22,9 +22,15 @@ follow them exactly.
 2. **Invoke Grok headlessly via Bash**, backgrounded (cold start + model run takes minutes):
 
    ```bash
-   grok -p "<PROMPT>" --output-format json --cwd "<PROJECT_ROOT>" 2>/tmp/grok.err >/tmp/grok.json
+   mkdir -p ~/.grok/scratch
+   grok -p "<PROMPT>" --output-format json --cwd ~/.grok/scratch 2>/tmp/grok.err >/tmp/grok.json
    ```
 
+   - **`--cwd` defaults to `~/.grok/scratch`** (a tiny empty dir). Grok scans/indexes `--cwd` at
+     startup, so a **large repo root hangs the call for minutes** (see Gotchas). Only point `--cwd`
+     at the project root — or, if that repo is big, the smallest relevant **sub**directory — when
+     Grok must actually read repo files. When you've inlined the needed code into the prompt (and for
+     image/video gen), keep the scratch dir.
    - **Read-only / review / diagnosis (default):** no extra flags. State "read-only — do not edit"
      inside the prompt too.
    - **Write-capable (user asked Grok to make changes):** add `--always-approve`, and prefer
@@ -42,6 +48,11 @@ follow them exactly.
 
 ## Gotchas
 
+- **Large-repo `--cwd` hang.** Grok indexes its working directory at startup (codebase-graph, git
+  walk, FTS content index). A big repo root can hang the call for minutes and never return — there
+  is **no `--no-index` / `--chat-only` flag**, `--cwd` is the only lever. Default `--cwd
+  ~/.grok/scratch`; only pass a real repo path when Grok must explore files, and prefer a narrow
+  subdirectory over a huge monorepo root.
 - **Effort flags may be unusable.** `--effort` / `--reasoning-effort` hard-fail on non-reasoning
   models (`400: Model <id> does not support parameter reasoningEffort`). If `grok models` shows
   only a build/non-reasoning model, do NOT pass them.

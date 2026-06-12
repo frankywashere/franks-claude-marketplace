@@ -17,17 +17,33 @@ The binary is typically at `~/.grok/bin/grok` (also symlinked as `agent`). Auth 
 `~/.grok/auth.json` — if a call fails with an auth error, the user must run `grok login`
 themselves (it's interactive; suggest they type `! grok login`).
 
+## ⚠ Working directory — ALWAYS default to a tiny scratch dir
+
+Grok **scans and indexes `--cwd` at startup** (codebase-graph, git tree walk, SQLite FTS content
+index). In a **large repo this hangs for minutes and may never return** — a one-shot prompt that
+finishes in ~2s from an empty dir can hang indefinitely when `--cwd` points at a big project.
+(Confirmed against this user's x14 repo: the in-repo run never returned after 4+ min while memory
+climbed; the identical prompt from `~/.grok/scratch` returned in ~2s. Grok itself confirmed there is
+**no `--no-index` / `--chat-only` flag** — `--cwd` is the only lever.)
+
+**So `--cwd` defaults to a dedicated empty dir, NOT `$PWD`.** Only point `--cwd` at a real repo when
+Grok must explore that repo's files itself — and even then prefer the smallest relevant
+**sub**directory, never a huge monorepo root. For everything else (quick Q&A, image/video, and
+second-opinion/diagnosis where you inline the code into the prompt) use the scratch dir.
+
 ## Core invocation
 
 ```bash
-grok -p "<TASK PROMPT>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+mkdir -p ~/.grok/scratch   # tiny, empty, non-git dir — keeps Grok's startup scan instant
+grok -p "<TASK PROMPT>" --output-format json --cwd ~/.grok/scratch 2>/tmp/grok.err >/tmp/grok.json
 ```
 
 - **`-p, --single "<prompt>"`** — single-turn headless. Prints response to stdout, exits. (Required.)
 - **`--output-format {plain,json,streaming-json}`** — use `json` when you need to parse the result
   reliably; use `plain` when you just want to relay prose to the user.
-- **`--cwd <path>`** — run against a specific directory (default: current dir). Pass the project
-  root explicitly so Grok reads the right repo.
+- **`--cwd <path>`** — directory Grok indexes at startup. **Default to `~/.grok/scratch`** (see the
+  warning above). Pass a real repo/subdir ONLY when Grok must read that repo's files directly, and
+  never a giant repo root (it will hang on the startup scan).
 - **Redirect stderr separately** (`2>...err >...json`). Grok writes logs / MCP errors to **stderr**
   and the clean result to **stdout**, so this keeps the JSON parseable.
 - **`-m, --model <id>`** — pin a model. Leave unset to use the default. `grok models` lists what
@@ -85,10 +101,10 @@ Grok generates **images** and **video** (xAI "Grok Imagine") via slash commands,
 **work in headless mode** — pass the slash command as the `-p` prompt:
 
 ```bash
-# Image
-grok -p "/imagine <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+# Image  (media gen never needs the repo — always use the scratch dir)
+grok -p "/imagine <description>" --output-format json --cwd ~/.grok/scratch 2>/tmp/grok.err >/tmp/grok.json
 # Video
-grok -p "/imagine-video <description>" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+grok -p "/imagine-video <description>" --output-format json --cwd ~/.grok/scratch 2>/tmp/grok.err >/tmp/grok.json
 ```
 
 **Where the output lands (verified):** NOT in `--cwd`. Grok writes media under its sessions dir:
@@ -153,7 +169,7 @@ On failure, stdout is instead `{"type":"error","message":"..."}` (and a top-leve
 print). **Detect failure by parsing, not exit code** — Grok exits `0` even on API errors:
 
 ```bash
-grok -p "$PROMPT" --output-format json --cwd "$PWD" 2>/tmp/grok.err >/tmp/grok.json
+grok -p "$PROMPT" --output-format json --cwd ~/.grok/scratch 2>/tmp/grok.err >/tmp/grok.json
 if jq -e '.type == "error"' /tmp/grok.json >/dev/null 2>&1 || ! jq -e 'has("text")' /tmp/grok.json >/dev/null 2>&1; then
   echo "GROK FAILED:"; jq -r '.message // .' /tmp/grok.json   # report loudly, do not fake success
 else
