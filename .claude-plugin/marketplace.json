@@ -44,6 +44,25 @@
         "imagine",
         "cli"
       ]
+    },
+    {
+      "name": "gemini-cli",
+      "source": "./gemini-cli-plugin",
+      "description": "Drive Google's Gemini CLI as a headless agent from Claude Code. Delegate code analysis, reviews, second opinions, diagnoses, and (opt-in) edits to `gemini -p`, with JSON output parsing, session resume, and verified read-only/write modes.",
+      "version": "1.0.0",
+      "author": {
+        "name": "frank",
+        "url": "https://github.com/frankywashere"
+      },
+      "keywords": [
+        "gemini",
+        "google",
+        "ai-agent",
+        "second-opinion",
+        "code-review",
+        "code-generation",
+        "cli"
+      ]
     }
   ]
 }
