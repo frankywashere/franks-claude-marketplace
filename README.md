@@ -32,6 +32,19 @@ Drive the **Grok CLI** (xAI) as a headless agent from Claude Code. Delegates tas
 
 **Version:** 1.2.1
 
+### gemini-cli
+
+Drive Google's **Gemini CLI** as a headless agent from Claude Code. Delegates code-related tasks to `gemini -p` — second opinions, code reviews, root-cause diagnosis, alternate implementations, or (opt-in) edits — and relays the result back.
+
+**Features:**
+- A `gemini` skill for direct, on-demand calls ("ask Gemini to …")
+- Headless non-interactive invocation (`-p`) with JSON output parsing (`-o json`)
+- Verified read-only review mode (default) and write-capable mode (`--approval-mode auto_edit`)
+- Session continuity (`--resume latest` / `--list-sessions`), stdin piping, and multi-dir context
+- Reliable failure detection via exit code + stderr, with documented org-policy and quota gotchas
+
+**Version:** 1.0.0
+
 ## Installation
 
 ### Add the Marketplace
@@ -45,6 +58,7 @@ Drive the **Grok CLI** (xAI) as a headless agent from Claude Code. Delegates tas
 ```bash
 /plugin install codex-exec
 /plugin install grok-cli
+/plugin install gemini-cli
 ```
 
 ### Verify Installation
@@ -59,6 +73,7 @@ Once installed, the plugins are automatically available in Claude Code.
 
 - **codex-exec** triggers when you say "use codex" / "run codex", ask for a second AI opinion on code, or request specialized code generation or analysis.
 - **grok-cli** triggers when you say "ask Grok", "have Grok …", or "get Grok's take". For heavier multi-step hand-offs, the `grok-rescue` subagent takes over.
+- **gemini-cli** triggers when you say "use gemini" / "ask Gemini" / "get Gemini's take", or want a second AI opinion, review, or diagnosis from Google's Gemini CLI.
 
 ## Repository Structure
 
@@ -73,14 +88,20 @@ franks-claude-marketplace/
 │   └── skills/
 │       └── codex-exec/
 │           └── SKILL.md          # Skill definition
-└── grok-cli-plugin/              # Plugin directory
+├── grok-cli-plugin/              # Plugin directory
+│   ├── .claude-plugin/
+│   │   └── plugin.json           # Plugin manifest
+│   ├── skills/
+│   │   └── grok/
+│   │       └── SKILL.md          # Skill definition
+│   └── agents/
+│       └── grok-rescue.md        # Subagent definition
+└── gemini-cli-plugin/            # Plugin directory
     ├── .claude-plugin/
     │   └── plugin.json           # Plugin manifest
-    ├── skills/
-    │   └── grok/
-    │       └── SKILL.md          # Skill definition
-    └── agents/
-        └── grok-rescue.md        # Subagent definition
+    └── skills/
+        └── gemini/
+            └── SKILL.md          # Skill definition
 ```
 
 ## Adding More Plugins
@@ -97,6 +118,7 @@ To add additional plugins to this marketplace:
 - Claude Code CLI installed
 - For `codex-exec`: OpenAI Codex CLI installed at `~/.npm-global/bin/codex`
 - For `grok-cli`: Grok CLI installed (`~/.grok/bin/grok`) and authenticated (`grok login`)
+- For `gemini-cli`: Gemini CLI installed (`@google/gemini-cli`, `~/.npm-global/bin/gemini`) and authenticated (run `gemini` once to sign in)
 
 ## License
 
