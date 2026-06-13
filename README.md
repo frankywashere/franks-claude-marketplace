@@ -38,12 +38,13 @@ Drive Google's **Gemini CLI** as a headless agent from Claude Code. Delegates co
 
 **Features:**
 - A `gemini` skill for direct, on-demand calls ("ask Gemini to …")
+- A `gemini-rescue` subagent for autonomous multi-step hand-offs
 - Headless non-interactive invocation (`-p`) with JSON output parsing (`-o json`)
 - Verified read-only review mode (default) and write-capable mode (`--approval-mode auto_edit`)
 - Session continuity (`--resume latest` / `--list-sessions`), stdin piping, and multi-dir context
 - Reliable failure detection via exit code + stderr, with documented org-policy and quota gotchas
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 ## Installation
 
@@ -73,7 +74,7 @@ Once installed, the plugins are automatically available in Claude Code.
 
 - **codex-exec** triggers when you say "use codex" / "run codex", ask for a second AI opinion on code, or request specialized code generation or analysis.
 - **grok-cli** triggers when you say "ask Grok", "have Grok …", or "get Grok's take". For heavier multi-step hand-offs, the `grok-rescue` subagent takes over.
-- **gemini-cli** triggers when you say "use gemini" / "ask Gemini" / "get Gemini's take", or want a second AI opinion, review, or diagnosis from Google's Gemini CLI.
+- **gemini-cli** triggers when you say "use gemini" / "ask Gemini" / "get Gemini's take", or want a second AI opinion, review, or diagnosis from Google's Gemini CLI. For heavier multi-step hand-offs, the `gemini-rescue` subagent takes over.
 
 ## Repository Structure
 
@@ -99,9 +100,11 @@ franks-claude-marketplace/
 └── gemini-cli-plugin/            # Plugin directory
     ├── .claude-plugin/
     │   └── plugin.json           # Plugin manifest
-    └── skills/
-        └── gemini/
-            └── SKILL.md          # Skill definition
+    ├── skills/
+    │   └── gemini/
+    │       └── SKILL.md          # Skill definition
+    └── agents/
+        └── gemini-rescue.md      # Subagent definition
 ```
 
 ## Adding More Plugins
